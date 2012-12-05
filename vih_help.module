@@ -1,0 +1,295 @@
+<?php
+
+/**
+ * @file
+ * Provides a "Getting Started" screen, with main help topics for Kickstart.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function vih_help_menu() {
+  $items = array();
+
+  // View help topic.
+  $items['help'] = array(
+    'title' => 'Help',
+    'description' => 'Find all the help you need to start using this site.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('_vih_help_store'),
+    'access arguments' => array('view advanced help topic'),
+    'file path' => drupal_get_path('module', 'advanced_help'),
+    'weight' => 200,
+  );
+
+  return $items;
+}
+
+/**
+* Implements hook_admin_paths().
+*/
+function vih_help_admin_paths() {
+  $paths = array(
+    'help' => TRUE,
+  );
+  return $paths;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function vih_help_menu_alter(&$items) {
+  $items['admin/tasks']['type'] =  MENU_CALLBACK;
+  $items['admin/index']['type'] = MENU_CALLBACK;
+}
+
+function _vih_help_store() {
+  drupal_set_breadcrumb(array(l(t('Home'), '<front>'), l(t('Help'), 'admin/advanced_help')));
+
+  $form = array();
+  $form['#attached']['css'] = array(drupal_get_path('module', 'vih_help') . '/css/vih_help.css');
+
+  /*
+  // Product management
+  $form['help_text'] = array(
+    '#type' => 'container',
+    '#attributes' => array('class' => array('product-management')),
+  );
+  $form['help_text']['general'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('General introduction') . '<span class="sub-title"> - ' . t('A quick general introduction to your site') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['help_text']['general']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>Find all the help you need to start using your site.</p><iframe width="640" height="360" src="http://www.youtube.com/embed/U2YM-iW7FZA?rel=0" frameborder="0" allowfullscreen></iframe>',
+  );
+  */
+  // Course management
+  $form['product_management'] = array(
+    '#type' => 'container',
+    '#attributes' => array('class' => array('product-management')),
+  );
+  $form['product_management']['product_management_title'] = array(
+    '#type' => 'item',
+    '#title' => t('Kursusadministration'),
+    '#attributes' => array('class' => array('product-management-title')),
+  );
+  // Create a product
+  $form['product_management']['get_email_long_courses'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Få e-mail ved tilmeldinger') . '<span class="sub-title"> - ' . t('Hvordan får man en e-mail ved tilmeldinger til lange kurser') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['product_management']['get_email_long_courses']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>Klik på Dashboard og så på "<a href="/admin/dashboard/webforms">Webformularer</a>". Klik på "E-mails". Der kan du oprette en e-mail til dig selv, når en tilmelder sig de lange kurser. </p>
+    <iframe width="640" height="360" src="hhttp://www.youtube.com/watch?v=_uP8qqLmTqY?rel=0" frameborder="0" allowfullscreen></iframe>',
+  );
+  /*
+  // Manage product
+  $form['product_management']['manage_product'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Add product categories') . '<span class="sub-title"> - ' . t('How to add new product category.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['product_management']['manage_product']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>You can easily <a href="/admin/structure/taxonomy">add new product categories</a> and <a href="/admin/structure/taxonomy/dantech_product_type">edit existing categories</a>.</p>
+    <iframe width="640" height="360" src="http://www.youtube.com/embed/h72bkmZT658?rel=0" frameborder="0" allowfullscreen></iframe>',
+  );
+  */
+  /*
+  // Content management
+  $form['order_management'] = array(
+    '#type' => 'container',
+    '#attributes' => array('class' => array('order-management')),
+  );
+  $form['order_management']['order_management_title'] = array(
+    '#type' => 'item',
+    '#title' => t('Content Management'),
+    '#attributes' => array('class' => array('order-management-title')),
+  );
+  // Add a page
+  $form['order_management']['edit_order'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Create a regular page') . '<span class="sub-title"> - ' . t('How to create a page, add a picture and put it in the menu.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['order_management']['edit_order']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>You can <a href="/node/add/dantech-page">create a page</a> by clicking on Add content in the menu and then selecting "Page".</p>
+    <iframe width="640" height="360" src="http://www.youtube.com/embed/uMoSYFUfLL0?rel=0" frameborder="0" allowfullscreen></iframe>',
+  );
+  */
+  /*
+  // Add a partner
+  $form['order_management']['add_partner'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Add a partner') . '<span class="sub-title"> - ' . t('How to create a partner for easy display.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['order_management']['add_partner']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>You can <a href="/node/add/dantech-partner">create a partner</a> by clicking on Add content in the menu and then selecting "Partner".</p>
+    <iframe width="640" height="360" src="http://www.youtube.com/embed/2N5_qGarSTI?rel=0" frameborder="0" allowfullscreen></iframe>',
+  );
+  /*
+  // Manage orders
+  $form['order_management']['manage_orders'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Manage Orders') . '<span class="sub-title"> - ' . t('How to bulk update statuses and delete orders.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['order_management']['manage_orders']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>The bulk update and filtering of the order management screen gives you tools to not only find the right order, but also to edit multiple orders at once. For example, you could find all abandoned shopping carts that are three days old and choose to delete them.</p>
+    <iframe width="640" height="360" src="http://www.youtube.com/embed/SyYs11jkj7s?rel=0" frameborder="0" allowfullscreen></iframe><br />
+    <a href="http://www.drupalcommerce.org/commerce-kickstart-2/orders-overview">Learn more about Order Management</a></p>',
+  );
+  */
+  /*
+  // Prices, Payments & Taxes
+  $form['prices_payments_taxes'] = array(
+    '#type' => 'container',
+    '#attributes' => array('class' => array('prices-payments-taxes')),
+  );
+  $form['prices_payments_taxes']['prices_payments_taxes_title'] = array(
+    '#type' => 'item',
+    '#title' => t('Prices, Payments & Taxes'),
+    '#attributes' => array('class' => array('prices-payments-taxes-title')),
+  );
+  // Coupons / Discounts
+  $form['prices_payments_taxes']['coupons_discounts'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Coupons / Discounts') . '<span class="sub-title"> - ' . t('How to make coupons and discounts the easy way.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['prices_payments_taxes']['coupons_discounts']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>TBD - The discounts module is still being worked on. Once it is feature complete expect additional help to be written.</p>
+    <a href="http://www.drupalcommerce.org/commerce-kickstart-2/coupons-discounts-overview">Learn more about Discounts & Coupons</a>',
+  );
+  // Payment Methods
+  $form['prices_payments_taxes']['payment_ethods'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Payment Methods') . '<span class="sub-title"> - ' . t('How to download and setup various payment methods.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['prices_payments_taxes']['payment_ethods']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>There are payment gateways and there are service providers that have partnered with Commerce Guys. There are 50+ payment providers that have been integrated with Drupal Commerce in the last year. Out of the box we have provided an example payment method to show what is possible.</p>
+    <a href="/admin/modules/service-providers">Go to the Service Providers</a>
+    <a href="/admin/commerce/config/payment-methods">Go to the Payment Methods</a>
+    <a href="http://www.drupalcommerce.org/commerce-kickstart-2/how-download-and-setup-payment-method">Learn more about Payment Methods</a>',
+  );
+  // Taxes
+  $form['prices_payments_taxes']['taxes'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Taxes') . '<span class="sub-title"> - ' . t('How to setup and understand taxes on your store.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['prices_payments_taxes']['taxes']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>Taxes in Drupal Commerce have two parts: Tax Rates (percentages) and Tax Types (how & when they are applied). The Tax Rates page allows you to create as many kinds of percentage rates as you need. Each rate must be a kind of tax type, which comes in two defaults: Sales Tax (applied to total) or VAT (applied to product individually). You can control when certain pricing actions by going to the Pricing Rules and changing their weights. By default, taxes are added to the order total (sales tax) or for each product\'s total (VAT).</p>
+    <a href="http://www.drupalcommerce.org/commerce-kickstart-2/taxes-overview">Learn more about Taxes</a>',
+  );
+  */
+  /*
+  // Store Settings
+  $form['store_settings'] = array(
+    '#type' => 'container',
+    '#attributes' => array('class' => array('store-settings')),
+  );
+  $form['store_settings']['store_settings_title'] = array(
+    '#type' => 'item',
+    '#title' => t('Store Settings'),
+    '#attributes' => array('class' => array('store-settings-title')),
+  );
+  // Checkout
+  $form['store_settings']['checkout'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Checkout') . '<span class="sub-title"> - ' . t('Customize the checkout process as much as you want.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['store_settings']['checkout']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>Drupal Commerce comes with a drag-and-drop checkout form builder that lets you decide what information you need to collect from or display to customers during the checkout process. It supports single and multi-page checkout depending on your requirements and can be easily extended with new components through the use of contributed or custom modules.</p>
+    <a href="http://www.drupalcommerce.org/commerce-kickstart-2/checkout-overview">Learn more about Checkout</a>',
+  );
+  // Customer Profiles
+  $form['store_settings']['customer_profiles'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Customer Profiles') . '<span class="sub-title"> - ' . t('How to customize the information you collect from customers.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['store_settings']['customer_profiles']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>ustomer profiles contain collections of data required to process orders, whether it be billing information, shipping information, or other types of details. These customer profiles are not unique to a user, meaning a single user may have multiple instances of each type of profile.</p>
+    <a href="http://www.drupalcommerce.org/user-guide/customer-profiles">Learn more about Customer Profiles</a>',
+  );
+  */
+  // Demo Store Features
+  $form['demo_store_features'] = array(
+    '#type' => 'container',
+    '#attributes' => array('class' => array('demo-store-features')),
+  );
+  $form['demo_store_features']['demo_store_featuress_title'] = array(
+    '#type' => 'item',
+    '#title' => t('Other features'),
+    '#attributes' => array('class' => array('demo-store-features-title')),
+  );
+  /*
+  // Slideshow
+  $form['demo_store_features']['slideshow'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Slideshow') . '<span class="sub-title"> - ' . t('Create slides for your homepage rotator.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['demo_store_features']['slideshow']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>The slideshow on the frontpage is quite easy to maintain. To <a href="/node/add/oe-slide">add slides</a>, you simply need to go to the Add Content page and select “Banner Slide.” You are presented with the title, link, and (of course) image.</p>
+    <iframe width="640" height="360" src="http://www.youtube.com/embed/ZOGeyfOqyOg?rel=0" frameborder="0" allowfullscreen></iframe>',
+  );
+  */
+
+  // Google Analytics
+  $form['demo_store_features']['google_analytics'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Google Analytics') . '<span class="sub-title"> - ' . t('Vis hvor mange besøgende hjemmesiden har.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['demo_store_features']['google_analytics']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>De besøgende registreres af <a href="http://google.com/analytics">Google Analytics</a>. Få en administrator til at oprette en konto til dig, og så vil du kunne se en masse statistik omkring hjemmesiden.</p>',
+  ); 
+  /*
+ // Frontpage
+  $form['demo_store_features']['change_frontpage'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Edit frontpage') . '<span class="sub-title"> - ' . t('Edit the content on the frontpage easily.') . '</span>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['demo_store_features']['change_frontpage']['content'] = array(
+    '#type' => 'item',
+    '#markup' => '<p>To edit the frontpage, you simply click the cog on the various parts of the page. Edit the content and hit save. You <strong>cannot</strong> change the layout of the frontpage - only edit the content.</p>
+    <iframe width="640" height="360" src="http://www.youtube.com/embed/N9PZlSfWCuI?rel=0" frameborder="0" allowfullscreen></iframe>',
+  );
+  */
+
+  return $form;
+}
